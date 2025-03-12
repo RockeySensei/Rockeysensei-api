@@ -25,9 +25,9 @@ def on_router():
 # Ejecutar la aplicación en Railway
 if __name__ == "__main__":
     port = os.getenv("PORT", "8000")  # Obtiene el puerto de Railway o usa 8000 por defecto
-    if not port.isdigit():
-        port = 8000  # Si PORT no es un número válido, usa 8000
-    else:
-        port = int(port)
+    try:
+        port = int(port)  # Intenta convertirlo a entero
+    except ValueError:
+        port = 8000  # Si falla la conversión, usa 8000 como puerto por defecto
 
     uvicorn.run(app, host="0.0.0.0", port=port)
