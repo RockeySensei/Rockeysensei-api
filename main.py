@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, Query, APIRouter
+from fastapi import FastAPI, APIRouter
 from fastapi.responses import Response
 from API.Funcion_Ruta.loop import registrar_rutas_desde_directorio
 import json
@@ -8,7 +8,7 @@ import uvicorn
 app = FastAPI()
 
 # Configuración de rutas
-carpeta_api = os.path.join(os.path.dirname(__file__), 'API')
+carpeta_api = os.path.join(os.path.dirname(__file__), "API")
 router_principal = APIRouter()
 
 registrar_rutas_desde_directorio(router_principal, carpeta_api)
@@ -24,5 +24,10 @@ def on_router():
 
 # Ejecutar la aplicación en Railway
 if __name__ == "__main__":
-    port = int(os.getenv("PORT", 8000))  # Usa 8000 como fallback
+    port = os.getenv("PORT", "8000")  # Obtiene el puerto de Railway o usa 8000 por defecto
+    if not port.isdigit():
+        port = 8000  # Si PORT no es un número válido, usa 8000
+    else:
+        port = int(port)
+
     uvicorn.run(app, host="0.0.0.0", port=port)
